@@ -1,0 +1,37 @@
+{
+  "name": "react-swap-router",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@pancakeswap/tokens": "^0.6.7",
+    "@ethersproject/providers": "^5.7.2",
+    "@uniswap/router-sdk": "^1.18.0",
+    "@uniswap/sdk-core": "^7.1.0",
+    "@uniswap/smart-order-router": "^4.12.0",
+    "@uniswap/v2-sdk": "^4.9.0",
+    "@uniswap/v3-sdk": "^3.21.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "strict-event-emitter": "^0.2.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.20.0",
+    "vite": "^6.0.5"
+  }
+}
