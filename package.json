@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@pancakeswap/tokens": "^0.6.7",
     "@ethersproject/providers": "^5.7.2",
+    "@pancakeswap/tokens": "^0.6.7",
     "@uniswap/router-sdk": "^1.18.0",
     "@uniswap/sdk-core": "^7.1.0",
-    "@uniswap/smart-order-router": "^4.12.0",
+    "@uniswap/smart-order-router": "^4.14.3",
     "@uniswap/v2-sdk": "^4.9.0",
     "@uniswap/v3-sdk": "^3.21.0",
+    "jsbi": "3.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "strict-event-emitter": "^0.2.8"

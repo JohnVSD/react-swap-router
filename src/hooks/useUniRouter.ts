@@ -1,10 +1,12 @@
+import { parseUnits } from '@ethersproject/units';
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { SwapRouter, Trade } from '@uniswap/router-sdk'
-import { arbitrumTokens, bscTokens } from '@pancakeswap/tokens'
+import { Protocol, SwapRouter, Trade } from '@uniswap/router-sdk'
+import { arbitrumTokens, bscTokens, baseTokens } from '@pancakeswap/tokens'
 import { Currency, CurrencyAmount, Percent, Token, TradeType } from '@uniswap/sdk-core'
+import JSBI from 'jsbi';
 import {
   AlphaRouter,
-  SwapType,
+  SwapType
 } from '@uniswap/smart-order-router'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -31,7 +33,7 @@ const getChainToken = (chain: 'BNB' | 'BASE' | 'ARB' | 'polygon') => {
       return {
         chainId: 8453,
         // from: baseTokens.usdc,
-        // to: baseTokens.dai,
+        // to: baseTokens.weth,
         from: new Token(8453, '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', 6, 'USDC'),
         to: new Token(8453, '0x2F20Cf3466f80A5f7f532fCa553c8cbc9727FEf6', 18, 'AKUMA'),
         rpc: 'https://1rpc.io/base',
@@ -62,7 +64,7 @@ const getChainToken = (chain: 'BNB' | 'BASE' | 'ARB' | 'polygon') => {
   }
 }
 
-const { chainId, from: fromToken, to: toToken, rpc } = getChainToken('BNB')
+const { chainId, from: fromToken, to: toToken, rpc } = getChainToken('BASE')
 
 const provider = new JsonRpcProvider(rpc)
 const router = new AlphaRouter({
@@ -83,9 +85,11 @@ export default function useUniRouter() {
   const getBestRoute = useCallback(
     async (amountIn: number) => {
       if (!swapFrom || !swapTo) return null
-
+      console.log('kkk:', amountIn * 10 ** swapFrom.decimals)
       try {
-        const currencyAmount = CurrencyAmount.fromRawAmount(swapFrom, amountIn * 10 ** swapFrom.decimals)
+        const typedValueParsed = parseUnits(amountIn.toString(), swapFrom.decimals).toString()
+        console.log('typedValueParsed：', typedValueParsed)
+        const currencyAmount = CurrencyAmount.fromRawAmount(swapFrom, JSBI.BigInt(typedValueParsed))
         console.log('数量：', currencyAmount.toExact(), swapFrom.symbol)
         setLoading(true)
         console.log('currencyAmount:', currencyAmount)
@@ -98,15 +102,14 @@ export default function useUniRouter() {
           TradeType.EXACT_INPUT,
           {
             type: SwapType.SWAP_ROUTER_02,
-            slippageTolerance: new Percent(5, 10_000),
+            slippageTolerance: new Percent(5, 1000),
             deadline: Math.floor(Date.now() / 1000) + 1800,
-            recipient,
+            recipient
+          },
+          {
+            maxSplits: 2,
+            maxSwapsPerPath: 2
           }
-          // {
-          //   maxSplits: 2,
-          //   maxSwapsPerPath: 2,
-          //   protocols: [Protocol.V2, Protocol.V3],
-          // }
         )
         setLoading(false)
         console.log('[UniSwap getBestRoute set trade success]', route)
@@ -132,7 +135,7 @@ export default function useUniRouter() {
     console.log('[UniSwap swapCallParams]', {
       calldata,
       value,
-      // to: SMART_ROUTER_ADDRESSES[56],
+      // to: UNIVERSAL_ROUTER_ADDRESS(UniversalRouterVersion.V2_0, chainId),
     })
 
     return {

@@ -15,7 +15,7 @@ function App() {
     <>
       <h1>Swap Router test</h1>
       <div className="card">
-        <button onClick={() => getBestRoute(1)}>
+        <button onClick={() => getBestRoute(2)}>
           点击询价
         </button>
       </div>
